@@ -17,30 +17,29 @@
       มี {{ foods.length }} รายการในอาหารที่ชอบ
     </div>
 
-    <div class="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+    <div class="mt-6 space-y-4">
       @for (f of foods; track f.id) {
-        <div class="card overflow-hidden bg-base-100 shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
-          <figure class="relative h-44 overflow-hidden">
-            <img [src]="f.image_path" alt="{{ f.name }}" class="h-full w-full object-cover" />
-            <button
-              class="icon-button btn btn-circle btn-sm absolute right-3 top-3 btn-primary shadow-lg"
-              (click)="toggle(f.id)"
-              [attr.aria-label]="'ลบออกจากโปรด'"
-            >
-              <fa-icon [icon]="faHeart"></fa-icon>
-            </button>
-          </figure>
-          <div class="card-body">
-            <h2 class="card-title text-base">{{ f.name }}</h2>
-            <div class="flex items-center gap-2">
-              <span class="badge badge-secondary badge-sm">{{ f.food_type }}</span>
-              <span class="text-xs text-neutral/50">{{ restaurantName(f.restaurant_id) }}</span>
+        <div class="favorite-card flex items-center gap-3 rounded-3xl border border-base-300/70 bg-base-100 p-3 shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg sm:gap-5 sm:p-4">
+          <a [routerLink]="['/food', f.restaurant_id, f.id]" class="flex min-w-0 flex-1 items-center gap-3 sm:gap-5">
+            <div class="h-28 w-28 shrink-0 overflow-hidden rounded-2xl sm:h-32 sm:w-40">
+              <img [src]="f.image_path" [alt]="f.name" class="h-full w-full object-cover" />
             </div>
-            <div class="card-actions mt-1 justify-between">
-              <span class="text-lg font-extrabold text-primary">฿{{ f.price }}</span>
-              <a class="btn btn-sm btn-ghost text-primary" [routerLink]="['/food', f.restaurant_id, f.id]">ดูรายละเอียด</a>
+            <div class="min-w-0">
+              <h2 class="line-clamp-2 text-base font-extrabold text-neutral sm:text-xl">{{ f.name }}</h2>
+              <div class="mt-2 flex flex-wrap items-center gap-2">
+                <span class="badge badge-secondary badge-sm">{{ f.food_type }}</span>
+                <span class="truncate text-xs text-neutral/50 sm:text-sm">{{ restaurantName(f.restaurant_id) }}</span>
+              </div>
+              <p class="mt-3 text-lg font-extrabold text-primary">฿{{ f.price }}</p>
             </div>
-          </div>
+          </a>
+          <button
+            class="delete-button icon-button btn btn-circle btn-sm shrink-0 text-error"
+            (click)="toggle(f.id)"
+            [attr.aria-label]="'ลบออกจากรายการที่ชอบ'"
+          >
+            <fa-icon [icon]="faTrash"></fa-icon>
+          </button>
         </div>
       } @empty {
         <div class="col-span-full space-y-3 rounded-2xl bg-base-100 p-10 text-center">

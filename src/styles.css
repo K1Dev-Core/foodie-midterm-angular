@@ -59,3 +59,10 @@ header .icon-button:focus-visible {
   background-color: #ffffff;
   color: var(--color-primary);
 }
+
+.delete-button:hover,
+.delete-button:focus-visible {
+  border-color: var(--color-error);
+  background-color: var(--color-error);
+  color: #ffffff;
+}
