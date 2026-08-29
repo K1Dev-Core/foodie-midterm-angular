@@ -1,0 +1,61 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+@plugin "daisyui" {
+  themes: false;
+}
+
+@plugin "daisyui/theme" {
+  name: "lineman";
+  default: true;
+  color-scheme: light;
+  --color-base-100: #ffffff;
+  --color-base-200: #ecf8f0;
+  --color-base-300: #d5f2e0;
+  --color-base-content: #23302a;
+  --color-primary: #00b14f;
+  --color-primary-content: #ffffff;
+  --color-secondary: #33d05a;
+  --color-secondary-content: #ffffff;
+  --color-accent: #82e2a4;
+  --color-accent-content: #143324;
+  --color-neutral: #23302a;
+  --color-neutral-content: #f4fbf6;
+  --color-info: #3b82f6;
+  --color-info-content: #ffffff;
+  --color-success: #00b14f;
+  --color-success-content: #ffffff;
+  --color-warning: #f5a623;
+  --color-warning-content: #231703;
+  --color-error: #e5573f;
+  --color-error-content: #ffffff;
+  --radius-selector: 1rem;
+  --radius-field: 1rem;
+  --radius-box: 1.25rem;
+  --border: 1px;
+  --depth: 1;
+}
+
+html,
+body {
+  font-family: "Noto Sans Thai", sans-serif;
+  background-color: var(--color-base-200);
+}
+
+.icon-button {
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.icon-button:hover,
+.icon-button:focus-visible {
+  border-color: var(--color-primary);
+  background-color: var(--color-primary);
+  color: #ffffff;
+}
+
+header .icon-button:hover,
+header .icon-button:focus-visible {
+  border-color: #ffffff;
+  background-color: #ffffff;
+  color: var(--color-primary);
+}

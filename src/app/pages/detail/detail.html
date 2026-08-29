@@ -1,0 +1,101 @@
+<div class="min-h-screen bg-base-200 pb-16">
+  @if (restaurant; as r) {
+    <header class="sticky top-0 z-20 border-b border-white/15 bg-primary text-primary-content shadow-lg">
+      <div class="mx-auto flex h-16 max-w-5xl items-center justify-between px-4">
+        <a routerLink="/" class="icon-button btn btn-ghost btn-circle text-primary-content" aria-label="กลับ">
+          <fa-icon [icon]="faArrowLeft"></fa-icon>
+        </a>
+        <h1 class="max-w-[65%] truncate text-center text-lg font-extrabold">{{ r.name }}</h1>
+        <a routerLink="/love" class="icon-button btn btn-ghost btn-circle text-primary-content" aria-label="อาหารที่ชอบ">
+          <fa-icon [icon]="faHeart"></fa-icon>
+        </a>
+      </div>
+    </header>
+
+    <main class="mx-auto max-w-5xl px-4">
+      <section class="restaurant-hero mt-5 overflow-hidden rounded-[2rem] bg-base-100 shadow-xl">
+        <div class="relative h-56 overflow-hidden sm:h-72">
+          <img [src]="foods[0]?.image_path" [alt]="r.name" class="h-full w-full object-cover" />
+          <div class="absolute inset-0 bg-gradient-to-t from-neutral/80 via-neutral/10 to-transparent"></div>
+          <div class="absolute bottom-5 left-5 right-5 text-white sm:bottom-7 sm:left-7">
+            <span class="badge border-0 bg-white/90 text-primary">{{ r.restaurant_type }}</span>
+            <h2 class="mt-2 text-2xl font-extrabold sm:text-3xl">{{ r.name }}</h2>
+          </div>
+        </div>
+        <div class="flex flex-wrap items-center gap-x-6 gap-y-3 px-5 py-5 text-sm text-neutral/70 sm:px-7">
+          <span class="flex items-center gap-2">
+            <fa-icon [icon]="faLocationDot" class="text-primary"></fa-icon>
+            {{ r.location }}
+          </span>
+          <span class="flex items-center gap-2">
+            <fa-icon [icon]="faUtensils" class="text-primary"></fa-icon>
+            {{ foods.length }} เมนู
+          </span>
+        </div>
+      </section>
+
+      <section class="mt-8">
+        <div class="flex items-end justify-between gap-4">
+          <div>
+            <p class="text-sm font-bold uppercase tracking-[0.2em] text-primary">เมนูแนะนำ</p>
+            <h2 class="mt-1 text-2xl font-extrabold text-neutral">เมนูของร้าน</h2>
+          </div>
+          <span class="rounded-full bg-primary/10 px-3 py-1 text-sm font-bold text-primary">{{ foods.length }} รายการ</span>
+        </div>
+
+        <div class="mt-5 grid gap-3 sm:grid-cols-[1fr_12rem]">
+          <label class="input input-bordered flex w-full items-center gap-3 border-0 bg-base-100 shadow-sm outline-0">
+            <fa-icon [icon]="faSearch" class="text-primary"></fa-icon>
+            <input type="text" class="grow" placeholder="ค้นหาเมนูในร้านนี้" [(ngModel)]="search" />
+          </label>
+          <select class="select select-bordered w-full border-0 bg-base-100 shadow-sm outline-0" [(ngModel)]="type">
+            @for (t of types; track t) {
+              <option [value]="t">{{ t }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="mt-5 grid gap-4 lg:grid-cols-2">
+          @for (f of foods; track f.id) {
+            <a [routerLink]="['/food', r.id, f.id]" class="menu-card group flex min-h-36 overflow-hidden rounded-3xl border border-base-300/70 bg-base-100 p-2 shadow-sm transition hover:-translate-y-1 hover:border-primary/30 hover:shadow-lg">
+              <div class="relative h-36 w-36 shrink-0 overflow-hidden rounded-2xl sm:h-40 sm:w-44">
+                <img [src]="f.image_path" [alt]="f.name" class="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
+                <span class="absolute bottom-2 left-2 rounded-full bg-neutral/75 px-2 py-1 text-xs font-bold text-white">{{ f.food_type }}</span>
+              </div>
+              <div class="flex min-w-0 flex-1 flex-col justify-between px-3 py-2 sm:px-4">
+                <div class="flex items-start justify-between gap-2">
+                  <div>
+                    <h3 class="line-clamp-2 font-extrabold text-neutral sm:text-lg">{{ f.name }}</h3>
+                    <p class="mt-1 text-xs text-neutral/50">กดเพื่อดูรายละเอียดและรีวิว</p>
+                  </div>
+                  <button
+                    class="icon-button btn btn-circle btn-sm shrink-0"
+                    [class.btn-primary]="isFav(f.id)"
+                    [class.btn-ghost]="!isFav(f.id)"
+                    (click)="$event.preventDefault(); $event.stopPropagation(); toggle(f.id)"
+                    [attr.aria-label]="isFav(f.id) ? 'นำออกจากโปรด' : 'เพิ่มในโปรด'"
+                  >
+                    <fa-icon [icon]="faHeart"></fa-icon>
+                  </button>
+                </div>
+                <div class="mt-3 flex items-center justify-between gap-2">
+                  <span class="text-xl font-extrabold text-primary">฿{{ f.price }}</span>
+                  <span class="text-xs font-bold text-primary opacity-0 transition group-hover:opacity-100">ดูรายละเอียด <span aria-hidden="true">→</span></span>
+                </div>
+              </div>
+            </a>
+          } @empty {
+            <div class="col-span-full rounded-3xl bg-base-100 px-6 py-14 text-center shadow-sm">
+              <fa-icon [icon]="faSearch" class="text-3xl text-primary/30"></fa-icon>
+              <p class="mt-3 font-semibold text-neutral/50">ไม่พบเมนูที่ค้นหา</p>
+            </div>
+          }
+        </div>
+      </section>
+    </main>
+  } @else {
+    <div class="mx-auto max-w-3xl px-4 pt-16">
+      <div class="rounded-3xl bg-base-100 p-12 text-center text-neutral/50 shadow-sm">ไม่พบข้อมูลร้านอาหาร</div>
+    </div>
+  }
+</div>

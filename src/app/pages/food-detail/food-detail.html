@@ -1,0 +1,96 @@
+<div class="min-h-screen bg-base-200 pb-16">
+  @if (food; as f) {
+    <header class="sticky top-0 z-20 border-b border-white/15 bg-primary text-primary-content shadow-lg">
+      <div class="mx-auto flex h-16 max-w-5xl items-center justify-between px-4">
+        <a [routerLink]="['/food', restaurantId()]" class="icon-button btn btn-ghost btn-circle text-primary-content" aria-label="กลับไปที่ร้าน">
+          <fa-icon [icon]="faArrowLeft"></fa-icon>
+        </a>
+        <h1 class="max-w-[65%] truncate text-center text-lg font-extrabold">รายละเอียดเมนู</h1>
+        <a routerLink="/love" class="icon-button btn btn-ghost btn-circle text-primary-content" aria-label="อาหารที่ชอบ">
+          <fa-icon [icon]="faHeart"></fa-icon>
+        </a>
+      </div>
+    </header>
+
+    <main class="mx-auto max-w-5xl px-4">
+      <section class="food-detail-card mt-5 overflow-hidden rounded-[2rem] bg-base-100 shadow-xl">
+        <div class="grid lg:grid-cols-[1.05fr_0.95fr]">
+          <div class="relative h-72 max-w-full overflow-hidden sm:h-96">
+            <img [src]="f.image_path" [alt]="f.name" class="h-full w-full object-cover" />
+            <div class="absolute left-5 top-5 rounded-full bg-white/90 px-3 py-1 text-sm font-bold text-primary">{{ f.food_type }}</div>
+          </div>
+          <div class="flex flex-col justify-center p-6 sm:p-10">
+            @if (restaurant; as r) {
+              <p class="flex items-center gap-2 text-sm font-bold text-primary">
+                <fa-icon [icon]="faLocationDot"></fa-icon>
+                {{ r.name }}
+              </p>
+            }
+            <h2 class="mt-3 text-3xl font-extrabold leading-tight text-neutral sm:text-4xl">{{ f.name }}</h2>
+            <p class="mt-4 text-sm leading-7 text-neutral/60">เมนู {{ f.food_type }} จากร้าน {{ restaurant?.name }}</p>
+            <div class="mt-7 flex items-end justify-between gap-4 border-t border-base-300 pt-5">
+              <div>
+                <p class="text-xs font-semibold text-neutral/50">ราคา</p>
+                <p class="text-3xl font-extrabold text-primary">฿{{ f.price }}</p>
+              </div>
+              <div class="text-right">
+                <div class="flex items-center justify-end gap-1 text-warning">
+                  @for (star of stars; track star) {
+                    <fa-icon [icon]="faStar" [class.text-warning]="isFull(star)" [class.text-base-300]="!isFull(star)"></fa-icon>
+                  }
+                </div>
+                <p class="mt-1 text-sm font-bold text-neutral/60">{{ rating.toFixed(1) }} จาก {{ reviews.length }} รีวิว</p>
+              </div>
+            </div>
+            <button class="btn mt-7 w-full rounded-2xl" [class.btn-primary]="isFav(f.id)" [class.btn-outline]="!isFav(f.id)" (click)="toggle(f.id)">
+              <fa-icon [icon]="faHeart"></fa-icon>
+              {{ isFav(f.id) ? 'อยู่ในอาหารที่ชอบแล้ว' : 'เพิ่มในอาหารที่ชอบ' }}
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section class="mt-8">
+        <div class="flex items-end justify-between gap-4">
+          <div>
+            <p class="text-sm font-bold uppercase tracking-[0.2em] text-primary">เสียงจากผู้ใช้</p>
+            <h2 class="mt-1 text-2xl font-extrabold text-neutral">รีวิวเมนู</h2>
+          </div>
+          <span class="rounded-full bg-primary/10 px-3 py-1 text-sm font-bold text-primary">{{ reviews.length }} รีวิว</span>
+        </div>
+
+        <div class="mt-5 overflow-hidden rounded-3xl bg-base-100 shadow-sm">
+          @for (review of reviews; track review.id) {
+            <article class="review-row flex gap-3 border-b border-base-300 p-5 last:border-0 sm:gap-4 sm:p-6">
+              <div class="avatar shrink-0">
+                <div class="w-11 overflow-hidden rounded-full bg-primary/10">
+                  <img [src]="avatar(review.user_id)" [alt]="userName(review.user_id)" />
+                </div>
+              </div>
+              <div class="min-w-0 flex-1">
+                <div class="flex flex-wrap items-start justify-between gap-2">
+                  <div>
+                    <h3 class="font-extrabold text-neutral">{{ userName(review.user_id) }}</h3>
+                    <div class="mt-1 flex gap-0.5 text-sm text-warning">
+                      @for (star of stars; track star) {
+                        <fa-icon [icon]="faStar" [class.text-warning]="star <= review.rating" [class.text-base-300]="star > review.rating"></fa-icon>
+                      }
+                    </div>
+                  </div>
+                  <span class="rounded-full bg-primary/10 px-2.5 py-1 text-xs font-extrabold text-primary">{{ review.rating }}.0</span>
+                </div>
+                <p class="mt-3 text-sm leading-7 text-neutral/70">{{ review.comment }}</p>
+              </div>
+            </article>
+          } @empty {
+            <div class="p-12 text-center text-neutral/50">ยังไม่มีรีวิวสำหรับเมนูนี้</div>
+          }
+        </div>
+      </section>
+    </main>
+  } @else {
+    <div class="mx-auto max-w-3xl px-4 pt-16">
+      <div class="rounded-3xl bg-base-100 p-12 text-center text-neutral/50 shadow-sm">ไม่พบข้อมูลเมนูอาหาร</div>
+    </div>
+  }
+</div>

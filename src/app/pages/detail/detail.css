@@ -1,0 +1,7 @@
+.card {
+  border-radius: 1.25rem;
+}
+
+.restaurant-hero img {
+  filter: saturate(1.05);
+}

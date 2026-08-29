@@ -1,0 +1,74 @@
+<div class="min-h-screen bg-base-200 pb-12">
+  <header class="sticky top-0 z-20 border-b border-white/15 bg-primary text-primary-content shadow-lg">
+    <div class="mx-auto flex h-16 max-w-5xl items-center justify-between px-4">
+      <div class="flex items-center gap-3">
+        <div class="grid h-10 w-10 place-items-center rounded-2xl bg-white text-primary shadow-sm">
+          <fa-icon [icon]="faHeart"></fa-icon>
+        </div>
+        <div>
+          <p class="text-lg font-extrabold leading-none tracking-wide">Foodie</p>
+          <p class="mt-1 text-[11px] font-medium text-white/75">อร่อยใกล้คุณ</p>
+        </div>
+      </div>
+      <a routerLink="/love" class="icon-button btn btn-ghost btn-circle text-primary-content" aria-label="รายการโปรด">
+        <fa-icon [icon]="faHeart"></fa-icon>
+      </a>
+    </div>
+  </header>
+
+  <div class="mx-auto max-w-5xl px-4">
+    <div class="mt-7 flex items-end justify-between gap-4">
+      <div>
+        <p class="text-sm font-bold uppercase tracking-[0.2em] text-primary">อร่อยทุกวัน</p>
+        <h1 class="mt-1 text-2xl font-extrabold text-neutral sm:text-3xl">ร้านอาหารทั้งหมด</h1>
+      </div>
+    </div>
+
+    <div class="mt-5 flex flex-col gap-3 rounded-3xl bg-base-100 p-4 shadow-sm sm:flex-row">
+      <label class="input input-bordered w-full items-center gap-3 border-0 bg-base-200 outline-0">
+        <fa-icon [icon]="faSearch"></fa-icon>
+        <input
+          type="text"
+          class="grow"
+          placeholder="ค้นหาร้านอาหาร..."
+          [(ngModel)]="search"
+        />
+      </label>
+      <select class="select select-bordered w-full border-0 bg-base-200 outline-0 sm:w-56" [(ngModel)]="type">
+        @for (t of types; track t) {
+          <option [value]="t">{{ t }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="mt-5 flex items-center justify-between rounded-2xl bg-primary/10 px-4 py-3 text-sm font-semibold text-primary">
+      พบ {{ restaurants.length }} ร้านอาหาร
+      <span class="text-xs text-primary/60">เลือกดูเมนูที่ชอบได้เลย</span>
+    </div>
+
+    <div class="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      @for (r of restaurants; track r.id) {
+        <a [routerLink]="['/food', r.id]" class="card overflow-hidden bg-base-100 shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
+          <figure class="h-44 overflow-hidden">
+            <img [src]="coverOf(r.id)" alt="{{ r.name }}" class="h-full w-full object-cover" />
+          </figure>
+          <div class="card-body">
+            <div class="flex items-start justify-between gap-3">
+              <h2 class="card-title line-clamp-2 min-w-0 text-lg">{{ r.name }}</h2>
+              <span class="mt-1 max-w-28 shrink-0 truncate rounded-full bg-primary px-2.5 py-1 text-center text-[11px] font-bold text-white sm:max-w-32">{{ r.restaurant_type }}</span>
+            </div>
+            <p class="text-sm text-neutral/60">📍 {{ r.location }}</p>
+            <div class="card-actions mt-2 justify-between">
+              <span class="text-xs font-semibold text-neutral/50">{{ countFoods(r.id) }} เมนู</span>
+              <button class="btn btn-sm btn-primary">ดูเมนู</button>
+            </div>
+          </div>
+        </a>
+      } @empty {
+        <div class="col-span-full rounded-2xl bg-base-100 p-10 text-center text-neutral/50">
+          ไม่พบร้านอาหารที่ค้นหา
+        </div>
+      }
+    </div>
+  </div>
+</div>
